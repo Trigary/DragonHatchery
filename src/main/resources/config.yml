@@ -1,0 +1,45 @@
+# IMPORTANT! This plugin requires Paper or one of its forks to work.
+
+# IMPORTANT! This plugin doesn't actually make eggs appear out of thin air.
+# You must set ender-dragons-death-always-places-dragon-egg to true in paper.yml.
+# The plugin was designed this way to be compatible with any other
+# dragon egg spawn modifying plugins you might have on your server.
+
+# Should debug logging be enabled?
+# You should enable this if you aren't sure what's going on.
+# Messages will only be sent to the console (and not to any players).
+debug-logging: true
+
+#TODO what to do if block is already present at position?
+#config option to break it naturally, default being replacing it (if that's vanilla)
+
+# Subsections of this section are the scenarios which are interpreted by this plugin.
+# You may want to have different results based on the scenario.
+scenario:
+  first: # This is the first time the ender dragon was killed
+    # How likely is it for a block (eg. dragon egg) to appear?
+    # Value of 0.0 stands for 0%, value of 0.42 stands for 42%, value of 1.0 stands for 100%.
+    spawn-chance: 1.00
+    # The blocks from which one is chosen at random.
+    # There must be at least one entry in this list.
+    # The chance of a specific value to be chosen can be computed as follows:
+    # chance[x] = ( (weight[x]) / (sum each weight) ) * 100%
+    spawned-block:
+      - type: dragon_egg # Identifier of this block (without the "minecraft:" part)
+        data: "" # Extra data for this block, get it via the plugin's commands
+        # How likely it is for this list entry to be chosen compared to others.
+        # The value must be positive, that's the only constraint.
+        # The value doesn't matter if there is only one entry (as long as it's a valid value).
+        # See more information about weight-to-chance conversion above.
+        weight: 13.42
+  subsequent: # The ender dragon has previously been killed, this isn't the first time
+    spawn-chance: 0.75
+    spawned-block:
+      - type: diamond_block
+        data: ""
+        weight: 65
+      - type: black_shulker_box
+        data: "" //TODO fill it with items
+        # The other weight is 65, the sum of the weights is 100.
+        # Therefore this weight of 35 stands for a 35% chance for this entry to be chosen.
+        weight: 35
