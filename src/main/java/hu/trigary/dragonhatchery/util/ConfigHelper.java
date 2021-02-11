@@ -18,7 +18,7 @@ public final class ConfigHelper {
 	
 	/**
 	 * Gets the {@link ConfigurationSection} at the specified location.
-	 * Fails if the section doesn't exist.
+	 * Fails if the section doesn't exist or if the value isn't a section.
 	 *
 	 * @param config the config in which to search
 	 * @param key the identifier of the section

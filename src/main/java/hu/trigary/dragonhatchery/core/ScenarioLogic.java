@@ -63,8 +63,8 @@ public class ScenarioLogic {
 		List<Map.Entry<BlockData, Double>> rawBlocks = new ArrayList<>();
 		
 		for (String spawnedBlockKey : spawnedBlocksSection.getKeys(false)) {
-			ConfigurationSection section = spawnedBlocksSection
-					.getConfigurationSection(spawnedBlockKey);
+			ConfigurationSection section = ConfigHelper
+					.getSection(spawnedBlocksSection, spawnedBlockKey);
 			
 			Material blockType = ConfigHelper.parseValue(section, "block-type", raw -> {
 				Material v = Material.matchMaterial(raw.toUpperCase());
