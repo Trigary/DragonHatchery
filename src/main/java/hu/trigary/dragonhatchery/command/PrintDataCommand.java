@@ -43,13 +43,16 @@ public class PrintDataCommand extends SubCommand {
 					.create());
 		} else {
 			String blockName = block.getType().getKey().getKey();
-			plugin.getLogger().info("Data of a " + blockName
-					+ " (requested by " + player.getName() + "): "
-					+ block.getBlockData().getAsString(true));
+			String data = block.getBlockData().getAsString(true);
+			int dataStart = data.indexOf("[");
+			data = dataStart == -1 ? "" : data.substring(dataStart);
+			plugin.getLogger().info("Data of a '" + blockName
+					+ "' (requested by " + player.getName() + "): \""
+					+ data + "\"");
 			player.sendMessage(new ComponentBuilder()
-					.append("The data of the ").color(ChatColor.GREEN)
+					.append("The data of the '").color(ChatColor.GREEN)
 					.append(blockName).color(ChatColor.YELLOW)
-					.append(" block has been printed to the console.")
+					.append("' block has been printed to the console.").color(ChatColor.GREEN)
 					.create());
 		}
 		return true;

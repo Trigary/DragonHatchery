@@ -29,7 +29,7 @@ public class ReloadCommand extends SubCommand {
 			@NotNull List<String> args) {
 		plugin.reload();
 		sender.sendMessage(new ComponentBuilder()
-				.append("The configuration has been reloaded.")
+				.append("The configuration has been reloaded. Check the console for errors.")
 				.color(ChatColor.GREEN)
 				.create());
 		return true;

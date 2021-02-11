@@ -59,7 +59,7 @@ public class ScenarioLogicHolder {
 			}
 			
 			logics.put(scenario, logic);
-			plugin.getLogger().log(Level.OFF,
+			plugin.getLogger().log(Level.FINE,
 					() -> logPrefix + "Registered logic for scenario: " + scenario);
 		}
 	}

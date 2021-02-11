@@ -12,11 +12,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Handler of the commands this plugin provides, including the subcommands.
@@ -59,18 +59,22 @@ public class BaseCommandHandler implements TabExecutor {
 	
 	@Override
 	public @Nullable List<String> onTabComplete(@NotNull CommandSender sender,
-			@NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-		if (args.length == 0) {
+			@NotNull Command command, @NotNull String alias,
+			@NotNull String @NotNull [] args) {
+		if (args.length == 0 || args[0].isEmpty()) {
 			return new ArrayList<>(subCommands.keySet());
-		} else {
-			SubCommand subCommand = getSubCommand(args);
-			if (subCommand == null) {
-				return Collections.emptyList();
-			} else {
-				List<String> subArgs = Arrays.asList(args).subList(1, args.length);
-				return subCommand.onTabComplete(sender, subArgs);
-			}
 		}
+		
+		SubCommand subCommand = getSubCommand(args);
+		if (subCommand != null) {
+			List<String> subArgs = Arrays.asList(args).subList(1, args.length);
+			return subCommand.onTabComplete(sender, subArgs);
+		}
+		
+		String partial = args[0].toLowerCase();
+		return subCommands.keySet().stream()
+				.filter(s -> s.startsWith(partial))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -84,11 +88,11 @@ public class BaseCommandHandler implements TabExecutor {
 				.append("Please specify one of the following subcommands:")
 				.color(ChatColor.YELLOW);
 		for (SubCommand subCommand : subCommands.values()) {
-			builder.append(" - ").color(ChatColor.GRAY)
+			builder.append("\n")
+					.append(" - ").color(ChatColor.GRAY)
 					.append(subCommand.getName()).color(ChatColor.GOLD)
 					.append(": ").color(ChatColor.GRAY)
-					.append(subCommand.getDescription()).color(ChatColor.WHITE)
-					.append("\n");
+					.append(subCommand.getDescription()).color(ChatColor.WHITE);
 		}
 		sender.sendMessage(builder.create());
 	}
@@ -100,7 +104,7 @@ public class BaseCommandHandler implements TabExecutor {
 	 */
 	private void registerSubCommand(@NotNull SubCommand subCommand) {
 		subCommands.put(subCommand.getName().toLowerCase(), subCommand);
-		plugin.getLogger().log(Level.OFF,
+		plugin.getLogger().log(Level.FINE,
 				() -> logPrefix + "Registered subcommand: " + subCommand.getName());
 	}
 	

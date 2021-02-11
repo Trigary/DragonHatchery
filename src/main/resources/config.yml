@@ -10,9 +10,6 @@
 # Messages will only be sent to the console (and not to any players).
 debug-logging: true
 
-#TODO what to do if block is already present at position?
-#config option to break it naturally, default being replacing it (if that's vanilla)
-
 # Subsections of this section are the scenarios which are interpreted by this plugin.
 # You may want to have different results based on the scenario.
 scenario:
@@ -25,8 +22,10 @@ scenario:
     # The chance of a specific value to be chosen can be computed as follows:
     # chance[x] = ( (weight[x]) / (sum each weight) ) * 100%
     spawned-block:
-      - type: dragon_egg # Identifier of this block (without the "minecraft:" part)
-        data: "" # Extra data for this block, get it via the plugin's commands
+      # This key can be anything, it's only used for logging. It has to be unique though.
+      some-key:
+        block-type: dragon_egg # Identifier of this block (without the "minecraft:" part)
+        block-data: "" # Extra data for this block, get it via the plugin's commands
         # How likely it is for this list entry to be chosen compared to others.
         # The value must be positive, that's the only constraint.
         # The value doesn't matter if there is only one entry (as long as it's a valid value).
@@ -35,11 +34,13 @@ scenario:
   subsequent: # The ender dragon has previously been killed, this isn't the first time
     spawn-chance: 0.75
     spawned-block:
-      - type: diamond_block
-        data: ""
+      diamond-block:
+        block-type: diamond_block
+        block-data: ""
         weight: 65
-      - type: black_shulker_box
-        data: "" //TODO fill it with items
+      rare-loot-box:
+        block-type: cauldron
+        block-data: "[level=3]"
         # The other weight is 65, the sum of the weights is 100.
         # Therefore this weight of 35 stands for a 35% chance for this entry to be chosen.
         weight: 35

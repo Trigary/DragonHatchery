@@ -46,37 +46,41 @@ public class ScenarioLogic {
 			Validate.isTrue(v >= 0 && v <= 1, "Chance must be between 0 and 1 (both inclusive)");
 			return v;
 		});
-		plugin.getLogger().log(Level.OFF, () -> logPrefix + "Spawn chance = " + spawnChance);
+		plugin.getLogger().log(Level.FINE, () -> logPrefix + "Spawn chance = " + spawnChance);
 		
 		//If any entry in the list is invalid: invalidate the entire instance.
 		//Why? Because we have proper fallback logic; no need to use improper weights.
 		
-		List<ConfigurationSection> list = ConfigHelper.computeValue(config,
-				"spawned-block", (c, k) -> {
-					//noinspection unchecked
-					var computed = (List<ConfigurationSection>) c.getList(k);
-					Validate.notNull(computed, "Missing value");
-					Validate.notEmpty(computed, "There must be at least 1 entry");
-					return computed;
+		ConfigurationSection spawnedBlocksSection = ConfigHelper
+				.computeValue(config, "spawned-block", (c, k) -> {
+					ConfigurationSection section = c.getConfigurationSection(k);
+					Validate.notNull(section, "Missing section");
+					Validate.notEmpty(section.getKeys(false),
+							"There must be at least 1 entry");
+					return section;
 				});
+		
 		List<Map.Entry<BlockData, Double>> rawBlocks = new ArrayList<>();
 		
-		for (ConfigurationSection section : list) {
+		for (String spawnedBlockKey : spawnedBlocksSection.getKeys(false)) {
+			ConfigurationSection section = spawnedBlocksSection
+					.getConfigurationSection(spawnedBlockKey);
+			
 			Material blockType = ConfigHelper.parseValue(section, "block-type", raw -> {
 				Material v = Material.matchMaterial(raw.toUpperCase());
 				Validate.notNull(v, "Material not found");
 				return v;
 			});
-			plugin.getLogger().log(Level.OFF, () -> logPrefix + "Block type = " + blockType);
+			plugin.getLogger().log(Level.FINE, () -> logPrefix + "Block type = " + blockType);
 			
 			BlockData blockData = ConfigHelper.parseValue(section,
 					"block-data", blockType::createBlockData);
-			plugin.getLogger().log(Level.OFF,
+			plugin.getLogger().log(Level.FINE,
 					() -> logPrefix + "Block data = " + blockData.getAsString(true));
 			
 			double weight = ConfigHelper.parseValue(section,
 					"weight", Double::parseDouble);
-			plugin.getLogger().log(Level.OFF, () -> logPrefix + "Weight = " + weight);
+			plugin.getLogger().log(Level.FINE, () -> logPrefix + "Weight = " + weight);
 			
 			rawBlocks.add(Map.entry(blockData, weight));
 		}
@@ -92,9 +96,9 @@ public class ScenarioLogic {
 	 * @return true if the egg spawning should get cancelled, false otherwise
 	 */
 	@Contract(pure = true)
-	public boolean shouldCancelEggSpawn() {
+	public boolean shouldAllowEggSpawn() {
 		double random = ThreadLocalRandom.current().nextDouble();
-		plugin.getLogger().log(Level.OFF,
+		plugin.getLogger().log(Level.FINE,
 				() -> logPrefix + "Rolled should-spawn value: " + random);
 		return random < spawnChance;
 	}
@@ -108,7 +112,7 @@ public class ScenarioLogic {
 	 */
 	public void handleEggSpawn(@NotNull DragonBattle battle, @NotNull BlockState newBlock) {
 		BlockData random = blocks.getRandom();
-		plugin.getLogger().log(Level.OFF,
+		plugin.getLogger().log(Level.FINE,
 				() -> logPrefix + "Rolled block: " + random.getAsString(true));
 		newBlock.setBlockData(random.clone());
 	}

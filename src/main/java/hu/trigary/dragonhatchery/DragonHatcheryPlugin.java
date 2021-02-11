@@ -8,6 +8,7 @@ import hu.trigary.dragonhatchery.util.DebugLogHandler;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +60,7 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 	public void reload() {
 		saveDefaultConfig();
 		reloadConfig();
+		getConfig().setDefaults(new YamlConfiguration()); //No defaults
 		
 		boolean enableDebugLogging;
 		try {
@@ -69,7 +71,7 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 					logPrefix + "Invalid config, defaulting to debug logging", e);
 			enableDebugLogging = true;
 		}
-		getLogger().setLevel(enableDebugLogging ? Level.OFF : Level.INFO);
+		getLogger().setLevel(enableDebugLogging ? Level.ALL : Level.INFO);
 		
 		scenarioLogicHolder = new ScenarioLogicHolder(this);
 		

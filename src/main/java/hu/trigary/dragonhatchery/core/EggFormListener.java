@@ -45,13 +45,13 @@ public class EggFormListener implements Listener {
 	@EventHandler
 	private void onEggSpawn(@NotNull DragonEggFormEvent event) {
 		if (event.isCancelled()) {
-			plugin.getLogger().log(Level.OFF,
+			plugin.getLogger().log(Level.FINE,
 					() -> logPrefix + "Egg spawning was already cancelled, ignoring event");
 			return;
 		}
 		
 		EggScenario scenario = EggScenario.getMatching(event.getDragonBattle());
-		plugin.getLogger().log(Level.OFF, () -> logPrefix + "Detected scenario: " + scenario);
+		plugin.getLogger().log(Level.FINE, () -> logPrefix + "Detected scenario: " + scenario);
 		
 		ScenarioLogic logic = plugin.getScenarioLogicHolder().getLogicFor(scenario);
 		if (logic == null) {
@@ -67,13 +67,13 @@ public class EggFormListener implements Listener {
 			return;
 		}
 		
-		if (logic.shouldCancelEggSpawn()) {
-			event.setCancelled(true);
-			plugin.getLogger().log(Level.OFF, () -> logPrefix + "Cancelled egg spawning");
-		} else {
+		if (logic.shouldAllowEggSpawn()) {
 			logic.handleEggSpawn(event.getDragonBattle(), event.getNewState());
-			plugin.getLogger().log(Level.OFF,
+			plugin.getLogger().log(Level.FINE,
 					() -> logPrefix + "Allowed egg spawning, updated block");
+		} else {
+			event.setCancelled(true);
+			plugin.getLogger().log(Level.FINE, () -> logPrefix + "Cancelled egg spawning");
 		}
 	}
 }

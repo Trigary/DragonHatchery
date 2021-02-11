@@ -37,7 +37,7 @@ import java.util.logging.LogRecord;
  */
 public class DebugLogHandler extends Handler {
 	
-	private static final String DEFAULT_DEBUG_PREFIX_FORMAT = "[%1$s-%2$s] %3$s";
+	private static final String DEFAULT_DEBUG_PREFIX_FORMAT = "[%1$s] %2$s";
 	private static final String DEFAULT_DEBUG_LOG_PREFIX = "DEBUG";
 	
 	/**
@@ -50,13 +50,10 @@ public class DebugLogHandler extends Handler {
 	}
 	
 	private final Plugin plugin;
-	private final String pluginName;
 	
 	@Contract(pure = true)
 	private DebugLogHandler(@NotNull Plugin plugin) {
 		this.plugin = plugin;
-		String prefix = plugin.getDescription().getPrefix();
-		this.pluginName = prefix != null ? prefix : plugin.getDescription().getName();
 	}
 	
 	@Override
@@ -65,9 +62,8 @@ public class DebugLogHandler extends Handler {
 				&& record.getLevel().intValue() < Level.INFO.intValue()) {
 			record.setLevel(Level.INFO);
 			record.setMessage(String.format(DEFAULT_DEBUG_PREFIX_FORMAT,
-					pluginName,
 					DEFAULT_DEBUG_LOG_PREFIX,
-					record.getMessage().substring(pluginName.length() + 3)));
+					record.getMessage()));
 		}
 	}
 	
