@@ -3,7 +3,7 @@ name: Build plugin (.jar)
 on:
   push:
   schedule: # Uploaded artifacts expire after some time, so let's upload new ones every so often
-    - cron: '50 * * * *' # TODO change this to every month, I'm only testing at the moment
+    - cron: '0 0 1 * *'
 
 jobs:
   build:
