@@ -10,6 +10,10 @@ also lets server owners define custom "loot" (spawned block) instead of dragon e
 **IMPORTANT!** This plugin only runs on Paper and its forks. It doesn't support Spigot and
 it has no plans to do so in the future.
 
+Links:
+[ [GitHub](https://github.com/Trigary/DragonHatchery) ]
+[ [bStats](https://bstats.org/plugin/bukkit/DragonHatchery/10368) ]
+
 ## Downloads
 
 The plugin is built via GitHub Actions artifacts. You have different download options

@@ -6,6 +6,7 @@ import hu.trigary.dragonhatchery.core.ScenarioLogicHolder;
 import hu.trigary.dragonhatchery.util.ConfigHelper;
 import hu.trigary.dragonhatchery.util.DebugLogHandler;
 import org.apache.commons.lang.Validate;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -41,6 +42,9 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 		Validate.notNull(baseCommand, "Command must be found");
 		//This also sets the tab completer
 		baseCommand.setExecutor(new BaseCommandHandler(this));
+		
+		//Constructor has side effects
+		new Metrics(this, 10368); //Hardcoded bStats plugin ID
 	}
 	
 	/**
