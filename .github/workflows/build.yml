@@ -1,9 +1,10 @@
 name: Build plugin (.jar)
 
 on:
-  push:
+  push: # Make the new version downloadable whenever the plugin changes
+    branches: [master] # Only make downloadable JARs from the stable branch
   schedule: # Uploaded artifacts expire after some time, so let's upload new ones every so often
-    - cron: '0 0 1 * *'
+    - cron: '0 0 1 * *' # Each month on the 1st at 00:00 (Once a month is the significant part)
 
 jobs:
   build:
