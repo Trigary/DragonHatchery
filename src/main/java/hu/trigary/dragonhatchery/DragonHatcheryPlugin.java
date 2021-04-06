@@ -5,9 +5,9 @@ import hu.trigary.dragonhatchery.core.EggFormListener;
 import hu.trigary.dragonhatchery.core.ScenarioLogicHolder;
 import hu.trigary.dragonhatchery.util.ConfigHelper;
 import hu.trigary.dragonhatchery.util.DebugLogHandler;
+import hu.trigary.dragonhatchery.util.InvalidConfigException;
 import org.apache.commons.lang.Validate;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
@@ -20,8 +20,12 @@ import java.util.logging.Level;
  */
 public class DragonHatcheryPlugin extends JavaPlugin {
 	
+	/**
+	 * Fake entry point for code analysis.
+	 *
+	 * @param args the arguments as required by the JLS, its value is ignored
+	 */
 	public static void main(String[] args) {
-		//Fake entry point for code analysis
 		DragonHatcheryPlugin hatchery = new DragonHatcheryPlugin();
 		hatchery.onEnable();
 		hatchery.onDisable();
@@ -44,6 +48,7 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 		baseCommand.setExecutor(new BaseCommandHandler(this));
 		
 		//Constructor has side effects
+		//noinspection ResultOfObjectAllocationIgnored
 		new Metrics(this, 10368); //Hardcoded bStats plugin ID
 	}
 	
@@ -64,13 +69,16 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 	public void reload() {
 		saveDefaultConfig();
 		reloadConfig();
-		getConfig().setDefaults(new YamlConfiguration()); //No defaults
+		
+		//Remove all default values: we don't want the default
+		// configuration to leak values into the actual configuration
+		getConfig().setDefaults(new YamlConfiguration());
 		
 		boolean enableDebugLogging;
 		try {
 			enableDebugLogging = ConfigHelper.parseValue(getConfig(),
 					"debug-logging", Boolean::parseBoolean);
-		} catch (ConfigHelper.InvalidConfigException e) {
+		} catch (InvalidConfigException e) {
 			getLogger().log(Level.SEVERE,
 					logPrefix + "Invalid config, defaulting to debug logging", e);
 			enableDebugLogging = true;
@@ -83,7 +91,7 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 			HandlerList.unregisterAll(eggFormListener);
 		}
 		eggFormListener = new EggFormListener(this);
-		Bukkit.getPluginManager().registerEvents(eggFormListener, this);
+		getServer().getPluginManager().registerEvents(eggFormListener, this);
 	}
 	
 	/**
@@ -96,13 +104,8 @@ public class DragonHatcheryPlugin extends JavaPlugin {
 			Class.forName("io.papermc.paper.event.block.DragonEggFormEvent");
 			loadError = null;
 		} catch (ClassNotFoundException notSupported) {
-			try {
-				Class.forName("com.destroystokyo.paper.PaperConfig");
-				loadError = "Your server is outdated, please update.";
-			} catch (ClassNotFoundException notPaper) {
-				loadError = "The server isn't running https://github.com/PaperMC/Paper"
-						+ " (and not one of its forks either).";
-			}
+			loadError = "The server isn't running https://github.com/PaperMC/Paper"
+					+ " (and not one of its forks either).";
 		}
 		
 		if (loadError != null) {

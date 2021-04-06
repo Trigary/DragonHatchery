@@ -1,7 +1,7 @@
 name: ${project.name}
 version: ${project.version}-${git.commit.id.abbrev}
 description: ${project.description}
-url: ${project.url}
+website: ${project.url}
 main: hu.trigary.dragonhatchery.DragonHatcheryPlugin
 api-version: 1.16
 

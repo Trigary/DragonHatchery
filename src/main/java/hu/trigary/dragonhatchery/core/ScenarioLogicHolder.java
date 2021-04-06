@@ -2,6 +2,7 @@ package hu.trigary.dragonhatchery.core;
 
 import hu.trigary.dragonhatchery.DragonHatcheryPlugin;
 import hu.trigary.dragonhatchery.util.ConfigHelper;
+import hu.trigary.dragonhatchery.util.InvalidConfigException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Contract;
@@ -35,7 +36,7 @@ public class ScenarioLogicHolder {
 		ConfigurationSection config;
 		try {
 			config = ConfigHelper.getSection(plugin.getConfig(), "scenario");
-		} catch (ConfigHelper.InvalidConfigException e) {
+		} catch (InvalidConfigException e) {
 			plugin.getLogger().log(Level.SEVERE,
 					logPrefix + "Invalid config, unable to load scenarios", e);
 			return;

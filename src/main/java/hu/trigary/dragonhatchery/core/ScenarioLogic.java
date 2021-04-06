@@ -5,6 +5,7 @@ import hu.trigary.dragonhatchery.util.ConfigHelper;
 import hu.trigary.dragonhatchery.util.WeightedRandomCollection;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.DragonBattle;
@@ -40,6 +41,7 @@ public class ScenarioLogic {
 			@NotNull ConfigurationSection config) {
 		logPrefix = getClass().getSimpleName() + "#" + config.getName() + ": ";
 		this.plugin = plugin;
+		Server server = plugin.getServer(); //Don't use the Bukkit class: hard to test (mock)
 		
 		spawnChance = ConfigHelper.parseValue(config, "spawn-chance", raw -> {
 			double v = Double.parseDouble(raw);
@@ -74,12 +76,15 @@ public class ScenarioLogic {
 			plugin.getLogger().log(Level.FINE, () -> logPrefix + "Block type = " + blockType);
 			
 			BlockData blockData = ConfigHelper.parseValue(section,
-					"block-data", blockType::createBlockData);
+					"block-data", data -> server.createBlockData(blockType, data));
 			plugin.getLogger().log(Level.FINE,
 					() -> logPrefix + "Block data = " + blockData.getAsString(true));
 			
-			double weight = ConfigHelper.parseValue(section,
-					"weight", Double::parseDouble);
+			double weight = ConfigHelper.parseValue(section, "weight", raw -> {
+				double v = Double.parseDouble(raw);
+				Validate.isTrue(v > 0, "Weight must be positive");
+				return v;
+			});
 			plugin.getLogger().log(Level.FINE, () -> logPrefix + "Weight = " + weight);
 			
 			rawBlocks.add(Map.entry(blockData, weight));
@@ -95,7 +100,6 @@ public class ScenarioLogic {
 	 *
 	 * @return true if the egg spawning should get cancelled, false otherwise
 	 */
-	@Contract(pure = true)
 	public boolean shouldAllowEggSpawn() {
 		double random = ThreadLocalRandom.current().nextDouble();
 		plugin.getLogger().log(Level.FINE,

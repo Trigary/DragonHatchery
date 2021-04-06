@@ -1,0 +1,10 @@
+spawn-chance: 0.42
+spawned-block:
+  stone:
+    block-type: stone
+    block-data: ""
+    weight: 1
+  dirt:
+    block-type: dirt
+    block-data: ""
+    weight: 10

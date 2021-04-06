@@ -1,0 +1,6 @@
+spawn-chance: 0.42
+spawned-block:
+  cauldron:
+    block-type: cauldron
+    block-data: "[level=3]"
+    weight: 1
