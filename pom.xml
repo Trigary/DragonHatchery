@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
-			<version>20.1.0</version>
+			<version>21.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -52,40 +52,28 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.7.1</version>
+			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.7.1</version>
+			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.7.0</version>
+			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!--<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.16</artifactId>
-			<version>0.25.0</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>-->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-inline</artifactId>
-			<version>3.8.0</version>
+			<version>3.11.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency> <!-- Copy Paper-API -->
+		<dependency> <!-- Required for tests, details copied from paper-api -->
 			<groupId>it.unimi.dsi</groupId>
 			<artifactId>fastutil</artifactId>
 			<version>8.2.2</version>
@@ -94,7 +82,7 @@
 	</dependencies>
 	
 	<build>
-		<!-- IntelliJ doesn't like the git-commit-id-plugin -->
+		<!-- IntelliJ doesn't like the git-commit-id-plugin, that's why suppress warnings -->
 		<!--suppress MavenModelInspection -->
 		<finalName>${project.name}-${project.version}-${git.commit.id.abbrev}</finalName>
 		
@@ -119,7 +107,7 @@
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
-				<version>4.0.3</version>
+				<version>4.0.5</version>
 				<executions>
 					<execution>
 						<id>get-the-git-infos</id>
@@ -166,7 +154,7 @@
 					<properties>
 						<configurationParameters>
 							junit.jupiter.execution.parallel.enabled=true
-							junit.jupiter.execution.parallel.mode.default = concurrent
+							junit.jupiter.execution.parallel.mode.default=concurrent
 						</configurationParameters>
 					</properties>
 				</configuration>
