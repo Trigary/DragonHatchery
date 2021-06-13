@@ -1,8 +1,9 @@
 package hu.trigary.dragonhatchery.command;
 
 import hu.trigary.dragonhatchery.DragonHatcheryPlugin;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -48,10 +49,8 @@ public class BaseCommandHandler implements TabExecutor {
 		} else {
 			List<String> subArgs = Arrays.asList(args).subList(1, args.length);
 			if (!subCommand.onCommand(sender, subArgs)) {
-				sender.sendMessage(new ComponentBuilder("Usage: ")
-						.color(ChatColor.RED)
-						.append("/" + label + " " + subCommand.getUsage())
-						.create());
+				sender.sendMessage(Component.text("Usage: /" + label
+						+ " " + subCommand.getUsage(), NamedTextColor.RED));
 			}
 		}
 		return true;
@@ -84,17 +83,18 @@ public class BaseCommandHandler implements TabExecutor {
 	 * @param sender who should receive the help message
 	 */
 	private void onWrongSubCommand(@NotNull CommandSender sender) {
-		ComponentBuilder builder = new ComponentBuilder()
-				.append("Please specify one of the following subcommands:")
-				.color(ChatColor.YELLOW);
+		TextComponent.Builder builder = Component.text()
+				.append(Component.text("Please specify one of the following subcommands:",
+						NamedTextColor.YELLOW));
 		for (SubCommand subCommand : subCommands.values()) {
-			builder.append("\n")
-					.append(" - ").color(ChatColor.GRAY)
-					.append(subCommand.getName()).color(ChatColor.GOLD)
-					.append(": ").color(ChatColor.GRAY)
-					.append(subCommand.getDescription()).color(ChatColor.WHITE);
+			builder.append(Component.newline())
+					.append(Component.text(" - ", NamedTextColor.GRAY))
+					.append(Component.text(subCommand.getName(), NamedTextColor.GOLD))
+					.append(Component.text(": ", NamedTextColor.GRAY))
+					.append(Component.text(subCommand.getDescription(),
+							NamedTextColor.WHITE));
 		}
-		sender.sendMessage(builder.create());
+		sender.sendMessage(builder);
 	}
 	
 	/**

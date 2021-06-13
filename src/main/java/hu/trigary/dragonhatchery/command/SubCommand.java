@@ -1,8 +1,8 @@
 package hu.trigary.dragonhatchery.command;
 
 import hu.trigary.dragonhatchery.DragonHatcheryPlugin;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -102,8 +102,8 @@ public abstract class SubCommand {
 		if (sender instanceof Player) {
 			return false;
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can use this command!")
-					.color(ChatColor.RED).create());
+			sender.sendMessage(Component.text("Only players can use this command!",
+					NamedTextColor.RED));
 			return true;
 		}
 	}

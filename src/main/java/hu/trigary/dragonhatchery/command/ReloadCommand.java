@@ -1,8 +1,8 @@
 package hu.trigary.dragonhatchery.command;
 
 import hu.trigary.dragonhatchery.DragonHatcheryPlugin;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,10 +28,8 @@ public class ReloadCommand extends SubCommand {
 	public boolean onCommand(@NotNull CommandSender sender,
 			@NotNull List<String> args) {
 		plugin.reload();
-		sender.sendMessage(new ComponentBuilder()
-				.append("The configuration has been reloaded. Check the console for errors.")
-				.color(ChatColor.GREEN)
-				.create());
+		sender.sendMessage(Component.text("The configuration has been reloaded."
+				+ " Check the console for errors.", NamedTextColor.GREEN));
 		return true;
 	}
 	

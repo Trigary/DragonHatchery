@@ -1,8 +1,8 @@
 package hu.trigary.dragonhatchery.command;
 
 import hu.trigary.dragonhatchery.DragonHatcheryPlugin;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
@@ -38,9 +38,8 @@ public class PrintDataCommand extends SubCommand {
 		Player player = (Player) sender;
 		Block block = player.getTargetBlock(4);
 		if (block == null) {
-			player.sendMessage(new ComponentBuilder()
-					.append("You aren't looking at any blocks!").color(ChatColor.RED)
-					.create());
+			player.sendMessage(Component.text("You aren't looking at any blocks!",
+					NamedTextColor.RED));
 		} else {
 			String blockName = block.getType().getKey().getKey();
 			String data = block.getBlockData().getAsString(true);
@@ -49,11 +48,12 @@ public class PrintDataCommand extends SubCommand {
 			plugin.getLogger().info("Data of a '" + blockName
 					+ "' (requested by " + player.getName() + "): \""
 					+ data + "\"");
-			player.sendMessage(new ComponentBuilder()
-					.append("The data of the '").color(ChatColor.GREEN)
-					.append(blockName).color(ChatColor.YELLOW)
-					.append("' block has been printed to the console.").color(ChatColor.GREEN)
-					.create());
+			player.sendMessage(Component.text()
+					.append(Component.text("The data of the '", NamedTextColor.GREEN))
+					.append(Component.text(blockName, NamedTextColor.YELLOW))
+					.append(Component.text("' block has been printed to the console.",
+							NamedTextColor.GREEN))
+			);
 		}
 		return true;
 	}
